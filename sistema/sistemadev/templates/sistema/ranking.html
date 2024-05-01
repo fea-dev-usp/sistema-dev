@@ -1,0 +1,87 @@
+{% extends "sistema/layout.html" %}
+{% load custom_tags %}
+
+{% block style %}
+    <style>
+        @media screen and (max-width: 1158px) {
+            .ranking-views {
+                width: 100%;
+            }
+            #primeiro {
+                scale: 1.03;
+            }
+            #segundo {
+                scale: 1.02;
+            }
+            #terceiro {
+                scale: 1.01;
+            }
+        }
+    </style>
+{% endblock style %}
+
+{% block body %}
+
+    <div class="ranking-views">
+        <div class="ranking-listing">
+            <h4>Ranking:</h4>
+            <br>
+            <ul class="list-group">
+                {% if user.is_staff or user.posicao|get_list %}
+                    {% if members %}
+                        {% for rank, member in members %}
+                                {% if rank == 0 %}
+                                    <li class="list-group-item" id="primeiro">
+                                {% elif rank == 1 %}
+                                    <li class="list-group-item" id="segundo">
+                                {% elif rank == 2 %}
+                                    <li class="list-group-item" id="terceiro">
+                                {% else %}
+                                    <li class="list-group-item">
+                                {% endif %}
+                                    <strong class="ranking-number">{{ rank }}</strong> {{ member.username }} - {{ member.score }} pontos
+                                </li>
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">Sem Membros</li>
+                    {% endif %}
+                {% else %}
+                    {% if members %}
+                        {% for rank, member in members %}
+                                {% if user.id == member.id %}
+                                    {% if rank == 0 %}
+                                        <li class="list-group-item" id="primeiro">
+                                    {% elif rank == 1 %}
+                                        <li class="list-group-item" id="segundo">
+                                    {% elif rank == 2 %}
+                                        <li class="list-group-item" id="terceiro">
+                                    {% else %}
+                                        <li class="list-group-item">
+                                    {% endif %}
+                                        <span><strong class="ranking-number">{{ rank }}</strong></span>
+                                        <span> {{ member.username }} - {{ member.score }} pontos</span>
+                                    </li>
+                                {% else %}
+                                    {% if rank == 0 %}
+                                        <li class="list-group-item" id="primeiro-blur">
+                                    {% elif rank == 1 %}
+                                        <li class="list-group-item" id="segundo-blur">
+                                    {% elif rank == 2 %}
+                                        <li class="list-group-item" id="terceiro-blur">
+                                    {% else %}
+                                        <li class="list-group-item" id="blur">
+                                    {% endif %}
+                                        <span><strong class="ranking-number">{{ rank }}</strong></span>
+                                        <span id="blur"> {{ member.username }} - {{ member.score }} pontos</span>
+                                    </li>
+                                {% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <li class="list-group-item">Sem Membros</li>
+                    {% endif %}
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock body %}

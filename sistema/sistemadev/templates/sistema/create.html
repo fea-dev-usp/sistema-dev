@@ -1,0 +1,226 @@
+{% extends "sistema/layout.html" %}
+
+{% block style %}
+
+    <style>
+
+        @media screen and (max-width: 1130px) {
+            
+        }
+
+    </style>
+
+{% endblock style %}
+
+{% block body %}
+    {% if message %}
+        <div class="error-message">
+            <h1>404</h1>
+            <p>Página "{{ message }}" não encontrada</p> 
+        </div>
+    {% else %}
+        {% if user.is_staff %}
+            {% if intention == "user" %}
+                <h4 style="text-align: center;">Criar Usuário</h4>
+            {% elif intention == "project" %}
+                <h4 style="text-align: center;">Criar Projeto</h4>
+            {% elif intention == "event" %}
+                <h4 style="text-align: center;">Criar Evento</h4>
+            {% endif %}
+            <div class="compose-create">
+                <form action="{% url 'create' intention %}" method="POST">
+                    {% csrf_token %}
+                    <div id="form-div">
+                        {% if message_error %}
+                            <div style="margin-bottom: 15px; text-align: center;">{{ message_error }}</div>
+                        {% endif %}
+                        {% if intention == 'user' %}
+                            <div class="mb-3 row">
+                                <label for="username" class="col-sm-2 col-form-label">Username:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="username" name="username" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="staff" class="col-sm-2 col-form-label">É staff?</label>
+                                <div class="col-sm-10">
+                                    <input type="checkbox" class="form-check-input" id="staff" name="staff">
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="position" class="col-sm-2 col-form-label">Cargo:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="position" name="position" required>
+                                        <option value="">Escolha uma posição</option>
+                                        {% for position in positions %}
+                                            <option value="{{ position.id }}">{{ position.nome|title }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="group" class="col-sm-2 col-form-label">Grupo:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="group" name="group" required>
+                                        <option value="">Escolha um grupo</option>
+                                        {% for group in groups %}
+                                            <option value="{{ group.id }}">{{ group.nome }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="area" class="col-sm-2 col-form-label">Área:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="area" name="area" required>
+                                        <option value="">Escolha uma área</option>
+                                        {% for area in areas %}
+                                            <option value="{{ area.id }}">{{ area.nome }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="email" class="col-sm-2 col-form-label">Email:</label>
+                                <div class="col-sm-10">
+                                    <input type="email" class="form-control" id="email" name="email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="password" class="col-sm-2 col-form-label">Senha:</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="password" name="password" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="confirmation" class="col-sm-2 col-form-label">Confirmação de Senha:</label>
+                                <div class="col-sm-10">
+                                    <input type="password" class="form-control" id="confirmation" name="confirmation" required>
+                                </div>
+                            </div>
+                        {% elif intention == 'project' %}
+                            <div class="mb-3 row">
+                                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="group" class="col-sm-2 col-form-label">Grupo:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="group" name="group" required>
+                                        <option value="">Escolha um grupo</option>
+                                        {% for group in groups %}
+                                            <option value="{{ group.id }}">{{ group.nome }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="category" class="col-sm-2 col-form-label">Categoria:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="category" name="category">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="start-date" class="col-sm-2 col-form-label">Dia início:</label>
+                                <div class="col-sm-4">
+                                    <input type="date" class="form-control" id="start-date" name="start-date" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="time" class="form-control" id="start-time" name="start-time" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="end-date" class="col-sm-2 col-form-label">Dia final:</label>
+                                <div class="col-sm-4">
+                                    <input type="date" class="form-control" id="end-date" name="end-date">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="time" class="form-control" id="end-time" name="end-time">
+                                </div>
+                            </div>
+                            <div class="mb-3 row" id="member-table">
+                                <label for="members" class="col-sm-2 col-form-label">Membros:</label>
+                                <div class="members col-sm-10">
+                                    {% for member in members %}
+                                        <div class="members-check">
+                                            <input type="checkbox" class="form-check-input" name="members" id="members" value="{{ member.id }}">
+                                            {{ member.username }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% elif intention == 'event' %}
+                            <div class="mb-3 row">
+                                <label for="name" class="col-sm-2 col-form-label">Nome:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="description" class="col-sm-2 col-form-label">Descrição:</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="description" rows="3" name="description" required></textarea>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="area" class="col-sm-2 col-form-label">Área:</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" id="area" name="area" required>
+                                        <option value="">Escolha uma área</option>
+                                        {% for area in areas %}
+                                            <option value="{{ area.id }}">{{ area.nome }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mb-3 row">
+                                <label for="category" class="col-sm-2 col-form-label">Categoria:</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="category" name="category">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="start-date" class="col-sm-2 col-form-label">Dia início:</label>
+                                <div class="col-sm-4">
+                                    <input type="date" class="form-control" id="start-date" name="start-date" required>
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="time" class="form-control" id="start-time" name="start-time" required>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="end-date" class="col-sm-2 col-form-label">Dia final:</label>
+                                <div class="col-sm-4">
+                                    <input type="date" class="form-control" id="end-date" name="end-date">
+                                </div>
+                                <div class="col-sm-4">
+                                    <input type="time" class="form-control" id="end-time" name="end-time">
+                                </div>
+                            </div>
+                            <div class="mb-3 row" id="member-table">
+                                <label for="members" class="col-sm-2 col-form-label">Membros:</label>
+                                <div class="members col-sm-10">
+                                    {% for member in members %}
+                                        <div class="members-check">
+                                            <input type="checkbox" class="form-check-input" name="members" id="members" value="{{ member.id }}">
+                                            {{ member.username }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        {% endif %}
+                        <input name="create" class="btn btn-primary" type="submit" value="Criar">
+                    </div>
+                </form>
+            </div>
+        {% endif %}
+    {% endif %}
+{% endblock body %}

@@ -1,0 +1,46 @@
+{% extends "sistema/layout.html" %}
+{% load custom_tags %}
+
+{% block body %}
+    {% if message %}
+        <div>
+            <p>404</p>
+            <p>{{ message }}</p> 
+        </div>
+    {% elif not user.posicao|get_list %}
+        <div class="error-message">
+            <h1>404</h1>
+            <p>Você não está autorizado</p> 
+        </div>
+    {% else %}
+        <div class="meeting-block">
+            <div style="margin: 15px auto; display: none;" id="message-success"></div>
+            <div class="input-group meeting-header">
+                <select class="form-select" name="meeting-select" id="meeting-select">
+                    <option value="00" selected>Select a option</option>
+                    {% if group_list %}
+                        {% for opt in group_list %}
+                            <option value="{{ opt.id }}" data-type="rp">{{ opt.nome }}</option>
+                        {% endfor %}
+                    {% endif %}
+                    {% if area_list %}
+                        {% for opt in area_list %}
+                            <option value="{{ opt.id }}" data-type="ra">{{ opt.nome }}</option>
+                        {% endfor %}
+                    {% endif %}
+                    <option value="0" data-type="rd">Reunião Diretoria</option>
+                    <option value="0" data-type="rg">Reunião Geral</option>
+                </select>
+            </div>
+            <div class="meeting-content">
+                <div style="font-size: 30px;">
+                    00:00:00
+                </div>
+                <div class="meeting-start-button">
+                    <button class="btn btn-primary" id="start-meeting" disabled>Start</button>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+{% endblock body %}

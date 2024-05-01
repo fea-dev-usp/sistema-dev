@@ -1,0 +1,653 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --body-color: #414141;
+    --sidebar-color: #212529;
+    --primary-color: #C5B829;
+    --primary-color-light: gainsboro;
+    --group-color: MediumPurple;
+    --area-color: Orchid;
+    --project-color: MediumSeaGreen; 
+    --event-color: SteelBlue;
+    --text-color: #eee;
+}
+
+body {
+    height: 100vh;
+    background: var(--body-color);
+}
+
+/* ====== Error Message ====== */
+
+.error-message {
+    text-align: center;
+    margin: auto 100px;
+    color: var(--text-color);
+}
+.error-message h1 {
+    font-size: 100px;
+    margin-bottom: 10px;
+}
+
+/* ====== Login ====== */
+
+.log-container {
+    max-width: 650px;
+    margin: 75px auto;
+    text-align: center;
+    padding: 0px 100px;
+}
+
+/* ====== Sidebar ====== */
+
+.main-container {
+    display: flex;
+}
+
+hr {
+    background-color: var(--text-color);
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 250px;
+    padding: 10px 14px;
+    background: var(--sidebar-color);
+    overflow-y: auto;
+}
+.sidebar .image-text img {
+    width: 40px;
+    border-radius: 6px;
+}
+
+.sidebar header a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+.sidebar .text .name {
+    font-size: 25px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.sidebar .image {
+    min-width: 60px;
+    display: flex;
+    align-items: center;
+}
+
+header .image-text .header-text {
+    display: flex;
+    flex-direction: column;
+}
+
+
+/* ===== Sidebar/Navbar Links ===== */
+
+
+.menu-links li {
+    margin-top: 15px;
+    text-decoration: none;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    color: var(--text-color);
+    font-size: 10px;
+}
+.menu-links li a, .menu-collapse a, .menu-bottom-links li a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-size: 20px;
+}
+
+.menu-links li a:hover, .menu-bottom-links li a:hover {
+    color: var(--primary-color);
+}
+
+.bottom-content {
+    position: absolute;
+    bottom: 0;
+    width: 90%;
+    margin-top: 15px;
+}
+.bottom-content li {
+    margin-bottom: 25px;
+    text-decoration: none;
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    color: var(--text-color);
+    font-size: 20px;
+}
+
+/* ====== Main ===== */
+
+.main {
+    margin-left: 250px;
+    padding: 20px;
+    width: 100%;
+    color: var(--text-color);
+}
+
+
+/* ===== Navbar Collapse ===== */
+
+#openNav-button {
+    background-color: var(--sidebar-color);
+    border: var(--text-color);
+    width: 40px;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+}
+
+.open-bar {
+    display: none;
+}
+
+#openNav-button svg {
+    color: var(--text-color);
+}
+
+.menu-collapse {
+    display: none;
+}
+
+.name-navbar-collapsed {
+    font-size: 25px;
+    font-weight: 500;
+    color: var(--text-color);
+}
+
+.navbar-text div {
+    margin-right: 10px;
+}
+
+.navbar-text img {
+    width: 40px;
+    border-radius: 6px;
+}
+
+#navbar-collapsed {
+    background-color: var(--sidebar-color);
+}
+
+.dropdown-menu { background-color: var(--sidebar-color); }
+
+/* ======= Index ====== */
+
+.index-views h4 {
+    color: var(--primary-color);
+}
+
+.index-views {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.index-listing ul {
+    columns: 2;
+    -webkit-columns: 2;
+    -moz-columns: 2;
+    width: 100%;
+}
+
+.columns{
+    float: left;
+    position: relative;
+    margin-right: 20px;
+}
+
+
+/* ====== Listing ====== */
+
+.index-listing li, .search-listing ul li, .display-listing li, .profile-listing li {
+    list-style: none;
+    color: var(--text-color);
+    background: var(--body-color);
+    border: var(--sidebar-color) 1px solid;
+    border-radius: 5px;
+}
+
+.index-listing li a, .search-listing ul li a, .profile-listing li a, .calendar-listing li a {
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.index-listing li a:hover, .search-listing ul li a:hover, .profile-listing li a:hover, .calendar-listing li a:hover {
+    color: var(--primary-color);
+}
+
+.index-listing, .search-listing, .display-listing, .profile-listing, .score, #form-div, .calendar-listing {
+    border: var(--text-color) 1px solid;
+    border-radius: 15px;
+    padding: 20px;
+    width: 100%;
+}
+
+/* ====== Search Navbar ====== */
+
+.search-bar {
+    padding-top: 25px;
+    padding-bottom: 0px;
+}
+
+
+/* ====== Search Listing ====== */
+
+#search-events-views, #search-users-views {
+    margin-top: 50px;
+}
+
+/* ====== Display Page ====== */
+
+.information {
+    text-align: center;
+    max-width: 650px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 15px;
+    border: 1px solid var(--text-color);
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.information strong {
+    color: #C5B829;
+}
+.information span {
+    margin-right: 5px;
+}
+.information form {
+    margin-top: 20px;
+}
+
+#des-form, #des-show, .bio-edit, .bio-show{
+    border: 1px solid var(--sidebar-color);
+    padding: 10px 20px;
+    margin: 10px 0px;
+}
+
+.display-listing li {
+    font-size: 17px;
+}
+
+/* ====== Profile ====== */
+
+.profile-views {
+    display: flex;
+}
+.profile-intro {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.intro {
+    width: 100%;
+    text-align: center;
+}
+.score {
+    text-align: center;
+    margin-right: 75px;
+}
+
+.icone {
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 15px;
+}
+
+.score {
+    text-align: center;
+    width: 20%;
+}
+.score p {
+    font-size: 20px;
+}
+
+/* ====== Create Page ====== */
+
+
+#form-div {
+    margin: 30px auto;
+    max-width: 85%;
+    text-align: left;
+}
+
+#form-div div {
+    margin-bottom: 10px;
+}
+
+.members-check, .meeting-members-check {
+    display: inline-block;
+    margin-left: 25px;
+    margin-top: 10px;
+}
+#member-table, #meeting-member {
+    margin-top: 5px;
+    border: 1px solid var(--sidebar-color);
+    border-radius: 15px;
+    padding: 20px;
+}
+
+/* ====== Calendar/Availability/Meeting ====== */
+
+#calendar-ava, #calendar, #table-members {
+    margin: 0 auto;
+    font-family: Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+    background-color: var(--primary-color-light);
+}
+
+#calendar-ava td, #calendar-ava th, #calendar td, #calendar th, #table-members td, #table-members th{
+    border: 1px solid var(--sidebar-color);
+    padding: 10px;
+    width: 10%;
+}
+
+#calendar-ava td, #calendar td, #table-members td {
+    color: black;
+}
+
+#calendar-ava th, #calendar th, #table-members th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: var(--primary-color);
+    color: var(--sidebar-color);
+}
+
+#calendar-ava td:hover, .day-desactive:hover {
+    background-color: var(--body-color);
+}
+
+#calendar-ava tr:nth-child(even), #calendar tr:nth-child(even) {
+    background-color: darkgray;
+}
+
+.header-calendar, .header-calendar-ava {
+    text-align: center;
+    margin-bottom: 20px;
+    border: 1px solid var(--sidebar-color);
+}
+  
+div#div-table {
+    overflow-x: auto;
+}
+
+/* ====== Calendar Page ====== */
+
+.group-event {
+    background-color: var(--group-color);
+}
+
+.area-event {
+    background-color: var(--area-color);
+}
+
+.project-event {
+    background-color: var(--project-color);
+}
+
+.event-event {
+    background-color: var(--event-color);
+}
+
+.group-event, .area-event, .project-event, .event-event {
+    height: 8px;
+}
+
+.calendar-possibilities {
+    height: 8px;
+    display: flex;
+}
+
+.all {
+    width: 25%;
+}
+.alone {
+    width: 100%;
+}
+
+.two {
+    width: 50%;
+}
+
+.three {
+    width: 33%;
+}
+
+.day-active {
+    background-color: var(--primary-color);
+    transform: scale(1.1);
+}
+
+.calendar-listing li {
+    padding: 10px;
+}
+.calendar-listing {
+    margin-top: 15px;
+}
+
+.calendar-listing li {
+    list-style: none;
+}
+
+.group-list li::before {
+    content: "\2022";
+    color: var(--group-color);
+    font-weight: bold;
+    display: inline-block;
+}
+
+.area-list li::before {
+    content: "\2022";
+    color: var(--area-color);
+    font-weight: bold;
+    display: inline-block;
+}
+
+.project-list li::before {
+    content: "\2022";
+    color: var(--project-color);
+    font-weight: bold;
+    display: inline-block;
+}
+
+.event-list li::before {
+    content: "\2022";
+    color: var(--event-color);
+    font-weight: bold;
+    display: inline-block;
+}
+
+.group-list {
+    border: 1px solid var(--group-color);
+}
+
+.area-list {
+    border: 1px solid var(--area-color);
+}
+
+.project-list {
+    border: 1px solid var(--project-color);
+}
+
+.event-list {
+    border: 1px solid var(--event-color);
+}
+
+.group-title {
+    color: var(--group-color);
+}
+
+.area-title {
+    color: var(--area-color);
+}
+
+.project-title {
+    color: var(--project-color);
+}
+
+.event-title {
+    color: var(--event-color);
+}
+
+/* ====== Meeting/Manage Page ====== */
+
+.meeting-block, .manage-block {
+    border: var(--text-color) 1px solid;
+    border-radius: 15px;
+    padding: 20px;
+    max-width: 650px;
+    margin: 50px auto;
+    text-align: center;
+}
+
+.meeting-block div, .manage-block div {
+    margin-bottom: 50px;
+    text-align: center;
+}
+
+.meeting-buttons button {
+    margin-right: 25px;
+    margin-top: 30px;
+}
+
+#counter {
+    font-size: 30px;
+}
+
+#meeting-title {
+    margin: 5px auto;
+}
+
+#meeting-select, #manage-select {
+    margin: 10px auto;
+    border: 1px solid var(--sidebar-color);
+    border-radius: 5px;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    outline: none;
+}
+
+#meeting-select:after, #manage-select:after {
+    content: "";
+    color: var(--text-color);
+    font-size: 20px;
+    padding-left: 5px;
+}
+
+#meeting-select.select-arrow-active:after, #manage-select.select-arrow-active:after {
+    border-color: transparent transparent #fff transparent;
+    top: 7px;
+}
+
+#table-members {
+    text-align: center;
+    word-wrap: break-word;
+}
+
+.manage-change-header {
+    text-align: center;
+}
+
+.manage-change-header input[type="submit"] {
+    margin: 0 auto;
+}
+
+.manage-check-input {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.dropdown-menu li {
+    color: var(--text-color);
+}
+
+/* ====== Ranking ====== */
+
+.ranking-listing h4 {
+    color: var(--primary-color);
+}
+
+.ranking-listing li {
+    list-style: none;
+    color: var(--text-color);
+    background: var(--body-color);
+    border: var(--sidebar-color) 1px solid;
+    border-radius: 5px;
+}
+
+.ranking-views {
+    border: var(--text-color) 1px solid;
+    border-radius: 15px;
+    padding: 20px;
+    width: 45%;
+    margin: 0 auto;
+}
+
+#blur {
+    color: transparent;
+    text-shadow: 0 0 15px var(--text-color);
+}
+
+.ranking-number {
+    font-size: 20px;
+    margin-right: 10px;
+    color: var(--primary-color);
+}
+
+#primeiro {
+    color: gold;
+    scale: 1.06;
+    margin-bottom: 3px;
+}
+
+#segundo {
+    color: silver;
+    scale: 1.04;
+    margin-bottom: 3px;
+}
+
+#terceiro {
+    color: #cd7f32;
+    scale: 1.02;
+    margin-bottom: 3px;
+}
+
+#primeiro-blur {
+    color: gold;
+    scale: 1.06;
+    margin-bottom: 3px;
+    text-shadow: 0 0 15px gold;
+}
+#segundo-blur {
+    color: silver;
+    scale: 1.04;
+    margin-bottom: 3px;
+    text-shadow: 0 0 15px silver;
+}
+#terceiro-blur {
+    color: #cd7f32;
+    scale: 1.02;
+    margin-bottom: 3px;
+    text-shadow: 0 0 15px #cd7f32;
+}

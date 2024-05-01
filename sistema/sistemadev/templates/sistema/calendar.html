@@ -1,0 +1,162 @@
+{% extends "sistema/layout.html" %}
+{% load custom_tags %}
+
+{% block body %}
+
+    <div>
+        <div id="calendar-title">
+            <div>
+                <h4 class="day-calendar">{{ month|title }} {{ year }}</h4>
+            </div>
+        </div>
+        <table id="calendar">
+            <tr class="header-calendar">
+                <th>Seg</th>
+                <th>Ter</th>
+                <th>Qua</th>
+                <th>Qui</th>
+                <th>Sex</th>
+                <th>Sab</th>
+                <th>Dom</th>
+            </tr>
+            {% for cal in calendar %}
+                <tr>
+                {% for day, weekday in cal %}
+                    {% if day == 0 %}
+                        <td></td>
+                    {% else %}
+                        <td class="day-desactive" data-day="{{ day }}" data-weekday="{{ weekday }}" data-dict="{{ all_dict }}">
+                            <div>
+                                {{ day }}
+                            </div>
+                            <br>
+                            <div class="calendar-possibilities">
+                                {% verify_events all_dict weekday day as result %}
+                                    {% if result == 19 %}
+                                        <div class="group-event all"></div>
+                                        <div class="area-event all"></div>
+                                        <div class="project-event all"></div>
+                                        <div class="event-event all"></div>
+                                    {% elif result == 1 %}
+                                        <div class="group-event alone"></div>
+                                    {% elif result == 2 %}
+                                        <div class="area-event alone"></div>
+                                    {% elif result == 5 %}
+                                        <div class="project-event alone"></div>
+                                    {% elif result == 11 %}
+                                        <div class="event-event alone"></div>
+                                    {% elif result == 3 %}
+                                        <div class="group-event two"></div>
+                                        <div class="area-event two"></div>
+                                    {% elif result == 6 %}
+                                        <div class="group-event two"></div>
+                                        <div class="project-event two"></div>
+                                    {% elif result == 12 %}
+                                        <div class="group-event two"></div>
+                                        <div class="event-event two"></div>
+                                    {% elif result == 7 %}
+                                        <div class="area-event two"></div>
+                                        <div class="project-event two"></div>
+                                    {% elif result == 13 %}
+                                        <div class="area-event two"></div>
+                                        <div class="event-event two"></div>
+                                    {% elif result == 16 %}
+                                        <div class="project-event two"></div>
+                                        <div class="event-event two"></div>
+                                    {% elif result == 8 %}
+                                        <div class="group-event three"></div>
+                                        <div class="area-event three"></div>
+                                        <div class="project-event three"></div>
+                                    {% elif result == 14 %}
+                                        <div class="group-event three"></div>
+                                        <div class="area-event three"></div>
+                                        <div class="event-event three"></div>
+                                    {% elif result == 17 %}
+                                        <div class="group-event three"></div>
+                                        <div class="project-event three"></div>
+                                        <div class="event-event three"></div>
+                                    {% elif result == 18 %}
+                                        <div class="area-event three"></div>
+                                        <div class="project-event three"></div>
+                                        <div class="event-event three"></div>
+                                    {% else %}
+                                        <div style="visibility: hidden;">
+                                    {% endif %}
+                            </div>
+                        </td>
+                    {% endif %}
+                {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        {% for cal in calendar %}
+            {% for day, weekday in cal %}
+                <div id="{{ day }}-{{ weekday }}" style="display: none;">
+                    <ul>
+                        {% if group_dict|verify:weekday %}
+                            <div class="calendar-listing group-list">
+                                <h4 class="group-title">Grupos</h4>
+                                {% with group_list=group_dict|get_item:weekday %}
+                                    {% for group in group_list %}
+                                        <li>
+                                            <span class="list-calendar-info"><strong>{{ group.nome }}:</strong></span>
+                                            <span class="list-calendar-info">{{ weekday|get_week_name }} - {{ group.hora_inicio }}</span>
+                                        </li>
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                        {% if area_dict|verify:weekday %}
+                            <div class="calendar-listing area-list">
+                                <h4 class="area-title">Áreas</h4>
+                                {% with area_list=area_dict|get_item:weekday %}
+                                    {% for area in area_list %}
+                                        <li>
+                                            <span class="list-calendar-info" href=""><strong>{{ area.nome }}:</strong></span>
+                                            <span class="list-calendar-info">{{ weekday|get_week_name }} - {{ area.hora_inicio }}</span>
+                                        </li>
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                        {% if event_dict|verify:day %}
+                            <div class="calendar-listing event-list">
+                                <h4 class="event-title">Eventos</h4>
+                                {% with event_list=event_dict|get_item:day %}
+                                    {% for event in event_list %}
+                                        <li>
+                                            <span><a class="list-calendar-info" href="{% url 'display' id=event.id type_info='event' %}"><strong>{{ event.nome }}:</strong></a></span>
+                                            {% if event.dia_fim  %}
+                                                <span class="list-calendar-info">{{ event.dia_inicio.hour }}:{{ event.dia_inicio.minute }} - {{ event.dia_fim.hour }}:{{ event.dia_fim.minute }}</span>
+                                            {% else %}
+                                                <span class="list-calendar-info">{{ event.dia_inicio.hour }}:{{ event.dia_inicio.minute }}</span>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                        {% if project_dict|verify:day %}
+                            <div class="calendar-listing project-list">
+                                <h4 class="project-title">Projetos</h4>
+                                {% with project_list=project_dict|get_item:day %}
+                                    {% for project in project_list %}
+                                        <li>
+                                            <span><a class="list-calendar-info" href="{% url 'display' id=project.id type_info='project' %}"><strong>{{ project.nome }}:</strong></a></span>
+                                            {% if project.dia_fim  %}
+                                                <span class="list-calendar-info">{{ project.dia_inicio.hour }}:{{ project.dia_inicio.minute }} - {{ project.dia_fim.hour }}:{{ project.dia_fim.minute }}</span>
+                                            {% else %}
+                                                <span class="list-calendar-info">{{ project.dia_inicio.hour }}:{{ project.dia_inicio.minute }}</span>
+                                            {% endif %}
+                                        </li>
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                        {% endif %}
+                    </ul>
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+
+{% endblock body %}

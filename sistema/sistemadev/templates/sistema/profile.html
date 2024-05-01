@@ -1,0 +1,156 @@
+{% extends "sistema/layout.html" %}
+{% load static %}
+{% load custom_tags %}
+
+{% block style %}
+
+    <style>
+
+        @media screen and (max-width: 575.5px) {
+            .profile-views, .profile-intro {
+                display: block;
+            }
+            #profile-events-views, #profile-projects-views {
+                margin-top: 30px;
+            }
+            .score {
+                margin: 20px auto;
+                width: 50%;
+            }
+        }
+        @media screen and (max-width: 900px) {
+            .information span {
+                display: block;
+            }
+        }
+        @media screen and (max-width: 1270) {
+            .score {
+                margin-right: 0px;
+            }
+        }
+
+    </style>
+
+{% endblock style %}
+
+{% block body %}
+    <div class="profile-intro">
+        <div class="intro">
+            <div class="icone">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="currentColor" class="bi bi-person-circle" viewBox="0 0 16 16">
+                    <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                    <path fill-rule="evenodd" d="M0 8a8 8  0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                </svg>
+            </div>
+            <div class="information">
+                <h4>{{ user.username }}</h4>
+                <br>
+                {% if cargo %}
+                    <span>
+                        <strong>Posição:</strong> {{ cargo|title }}
+                    </span>
+                {% endif %}
+                {% if area %}
+                    <span>
+                        <strong>Área:</strong>
+                        {% for indice, ar in area|enumerate_for %}
+                            {% if area|lenght_for and indice|lenght_last:area %}
+                                {{ ar.nome }},
+                            {% else %}
+                                {{ ar.nome }}
+                            {% endif %}   
+                        {% endfor %}
+                    </span>
+                {% endif %}
+                {% if grupo %}
+                    <span>
+                        <strong>Grupo:</strong>
+                        {% for indice, gru in grupo|enumerate_for %}
+                            {% if grupo|lenght_for and indice|lenght_last:grupo %}
+                                {{ gru.nome }},
+                            {% else %}
+                                {{ gru.nome }}
+                            {% endif %}  
+                        {% endfor %}
+                    </span>
+                {% endif %}
+                <div>
+                    {% if user.is_authenticated %}
+                            {% if user.biografia %}
+                                <div class="bio-show" id="bio-show">
+                                    <div>
+                                        <p id="content-bio">{{ user.biografia }}</p>
+                                    </div>
+                            {% else %}
+                                <div class="bio-show" id="bio-show" style="display: none;">
+                                    <div>
+                                        <p id="content-bio"></p>
+                                    </div>
+                            {% endif %}
+                            <div>
+                                <a href="" id="button-bio-edit">Editar</a>
+                            </div>
+                        </div>
+                        {% if user.biografia %}
+                            <div class="bio-edit" id="bio-form" style="display: none;">
+                                <form id="form-compose-bio" data-intention="edit" class="compose-edit">
+                        {% else %}
+                            <div class="bio-edit" id="bio-form">
+                                <form id="form-compose-bio" data-intention="create" class="compose-edit">
+                        {% endif %}
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% if user.biografia %}
+                                        <textarea name="content" maxlength="300" id="content-bio-compose" class="form-control">{{ user.biografia }}</textarea>
+                                    {% else %}
+                                        <textarea name="content" maxlength="300" id="content-bio-compose" class="form-control" placeholder="Say something about you"></textarea>
+                                    {% endif %}
+                                </div>
+                                <div id="error" class="error" style="display: none; margin-bottom: 10px;"></div>
+                                <input type="submit" class="btn btn-primary" value="Save"></input>
+                            </form>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="score">
+            <h4>Pontuação:</h4>
+            <br>
+            {% if score %}
+                <p>{{ score }}</p>
+            {% else %}
+                <p>0</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="profile-views">
+        <div class="profile-listing" id="profile-projects-views">
+            <h4>Projetos:</h4>
+            <br>
+            <ul class="list-group">
+                {% if projects %}
+                    {% for project in projects %}
+                        <li class="list-group-item"><a href="{% url 'display' id=project.id type_info='project' %}">{{ project.nome }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Sem projetos</li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="profile-listing" id="profile-events-views">
+            <h4>Eventos:</h4>
+            <br>
+            <ul class="list-group">
+                {% if events %}
+                    {% for event in events %}
+                        <li class="list-group-item"><a href="{% url 'display' id=event.id type_info='event' %}">{{ event.nome }}</a></li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Sem eventos</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock body %}

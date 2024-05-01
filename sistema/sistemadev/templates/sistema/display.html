@@ -1,0 +1,124 @@
+{% extends "sistema/layout.html" %}
+{% load custom_tags %}
+
+{% block style %}
+
+    <style>
+
+        @media screen and (max-width: 520px) {
+            .information span {
+                display: block;
+            }
+            #des-form, #des-show {
+                margin-top: 15px;
+            }
+        }
+
+    </style>
+
+{% endblock style %}
+
+{% block body %}
+
+    <div>
+        {% if message %}
+            <div class="alert alert-success" role="alert">
+                {{ message }}
+            </div>
+        {% else %}
+            <div class="information">
+                <h4>{{ info.nome }}</h4>
+                <br>
+                {% if info.area %}
+                    <span>
+                        <strong>Área:</strong> {{ info.area }}
+                    </span>
+                {% elif info.group %}
+                    <span>
+                        <strong>Grupo:</strong> {{ info.grupo }}
+                    </span>
+                {% endif %}
+                {% if info.responsible %}
+                    <span>
+                        <strong>Responsável:</strong> {{ info.responsavel }}
+                    </span>
+                {% endif %}
+                {% if info.category %}
+                    <span>
+                        <strong>Categoria:</strong> {{ info.categoria }}
+                    </span>
+                {% endif %}
+                <div>
+                    {% if user.is_authenticated %}
+                            {% if info.descricao %}
+                                <div class="des-show" id="des-show">
+                                    <div>
+                                        <p id="content-des">{{ info.descricao }}</p>
+                                    </div>
+                            {% else %}
+                                <div class="des-show" id="des-show" style="display: none;">
+                                    <div>
+                                        <p id="content-des"></p>
+                                    </div>
+                            {% endif %}
+                            <div>
+                                <a href="" id="button-des-edit">Editar</a>
+                            </div>
+                        </div>
+                        {% if info.descricao %}
+                            <div class="des-edit" id="des-form" style="display: none;">
+                                <form id="form-compose-des" data-intention="edit" class="compose-edit">
+                        {% else %}
+                            <div class="des-edit" id="des-form">
+                                <form id="form-compose-des" data-intention="create" class="compose-edit">
+                        {% endif %}
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    {% if info.descricao %}
+                                        <textarea name="content" maxlength="300" id="content-des-compose" class="form-control" data-type="{{ type }}" data-id="{{ info.id }}">{{ info.descricao }}</textarea>
+                                    {% else %}
+                                        <textarea name="content" maxlength="300" id="content-des-compose" class="form-control" placeholder="Say something about you" data-type="{{ type }}" data-id="{{ info.id }}"></textarea>
+                                    {% endif %}
+                                </div>
+                                <div id="error" class="error" style="display: none; margin-bottom: 10px;"></div>
+                                <input type="submit" class="btn btn-primary" value="Save"></input>
+                            </form>
+                        </div>
+                    {% endif %}
+                    <div style="margin-top: 15px;">
+                        {% if info.dia_inicio %}
+                            <span>
+                                <strong>Começou:</strong> {{ info.dia_inicio|date:"d/m/Y" }}
+                            </span>
+                        {% endif %}
+                        {% if info.dia_fim %}
+                            <span>
+                                <strong>Terminou:</strong> {{ info.dia_fim|date:"d/m/Y" }}
+                            </span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="display-listing col-sm-7" id="projects-views" style="margin-right: auto; margin-left: auto;">
+                    <h4>Organização:</h4>
+                    <br>
+                    <ul class="list-group">
+                        {% if info.membros_planejados %}
+                            {% for member in info.membros_planejados|get_all %}
+                                <li class="list-group-item">{{ member.username }}</li>
+                            {% endfor %}
+                        {% elif info.membros %}
+                            {% for member in info.membros|get_all %}
+                                <li class="list-group-item">{{ member.username }}</a></li>
+                            {% endfor %}
+                        {% else %}
+                        <li class="list-group-item">Nenhum membro encontrado</li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock body %}

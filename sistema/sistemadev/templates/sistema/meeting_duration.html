@@ -1,0 +1,84 @@
+{% extends "sistema/layout.html" %}
+{% load custom_tags %}
+
+{% block script %}
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const input = document.querySelector('#inputGroupFile02');
+            const label = document.querySelector('#label-file');
+
+            input.addEventListener('change', function() {
+                if (input.files.length > 0) {
+                    label.textContent = input.files[0].name;
+                } else {
+                    label.textContent = 'Escolha um arquivo/ata da reunião';
+                }
+            });
+        });
+    </script>
+{% endblock script %}
+
+{% block body %}
+    {% if message %}
+        <div class="error-message">
+            <h1>404</h1>
+            <p>{{ message }}</p> 
+        </div>
+    {% elif not user.posicao|get_list %}
+        <div>
+            <p>404</p>
+            <p>Você não está autorizado</p> 
+        </div>
+    {% else %}
+        <div class="meeting-block">
+            <div class="input-group meeting-header">
+                <h2 id="meeting-title">{{ reuniao }}</h2>
+            </div>
+            <div class="meeting-archive">
+                <form id="forms-file" enctype="multipart/form-data">
+                    <div class="input-group mb-3">
+                        <div class="custom-file">
+                        <input type="file" class="custom-file-input" name="report" id="inputGroupFile02" name="archive">
+                        <label class="custom-file-label" id="label-file" for="inputGroupFile02">Escolha um arquivo/ata da reunião</label>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="meeting-content">
+                <div id="counter">
+                    00:00:00
+                </div>
+                <div class="meeting-buttons">
+                    <button class="btn btn-danger" id="cancel-meeting">Cancelar</button>
+                    <button class="btn btn-warning" id="restart-meeting">Recomeçar</button>
+                    <button class="btn btn-success" id="finish-meeting" data-id="{{ reuniao_id }}" data-type="{{ type_info }}">Finalizar</button>
+                </div>
+            </div>
+        </div>
+        <div>
+            {% if membros %}
+                <form id="form-members">
+                    <table id="table-members">
+                        <tr>
+                            <th>Membros</th>
+                            <th>Confirmou e Não compareceu</th>
+                            <th>Ausente</th>
+                            <th>Ausente com Justificativa</th>
+                            <th>Presente</th>
+                        </tr>
+                        {% for membro in membros %}
+                            <tr>
+                                <td>{{ membro.username }}</td>
+                                <td><input type="radio" name="presenca-{{ membro.id }}" id="confirmou-{{ membro.id }}" value="{{ membro.id }}_-0.5" data-id="{{ membro.id }}"></td>
+                                <td><input type="radio" name="presenca-{{ membro.id }}" id="ausente-{{ membro.id }}" value="{{ membro.id }}_0.0" data-id="{{ membro.id }}"></td>
+                                <td><input type="radio" name="presenca-{{ membro.id }}" id="ausente-jus-{{ membro.id }}" value="{{ membro.id }}_0.3" data-id="{{ membro.id }}"></td>
+                                <td><input type="radio" name="presenca-{{ membro.id }}" id="presente-{{ membro.id }}" value="{{ membro.id }}_1.0" data-id="{{ membro.id }}"></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </form>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% endblock body %}

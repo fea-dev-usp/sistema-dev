@@ -1,0 +1,98 @@
+{% extends "sistema/layout.html" %}
+{% load custom_tags %}
+
+
+{% block style %}
+
+    <style>
+
+        @media screen and (max-width: 900px) {
+            #index-events-views {
+                margin-top: 50px;
+            }
+            .index-views {
+                display: block;
+            }
+            .index-listing ul {
+                columns: 1;
+                -webkit-columns: 1;
+                -moz-columns: 1;
+            }
+            .columns {
+                float: none;
+                position: static;
+            }
+        }
+    </style>
+
+{% endblock style %}
+
+{% block body %}
+
+    <div class="index-views">
+        <div class="index-listing" id="index-events-views">
+            <h4>Dias Reunião:</h4>
+            <br>
+            <ul class="columns">
+                {% if reunioes %}
+                    {% for reuniao in reunioes %}
+                        <li class="list-group-item">
+                            <h6>{{ reuniao.nome}}</h6>
+                            <div>{{ reuniao.dia_reuniao|get_week_name }} - {{ reuniao.hora_inicio }}</div>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Sem Reunião</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="index-views">
+        <div class="index-listing" id="index-projects-views">
+            <h4>Links importantes:</h4>
+            <br>
+            <ul class="columns">
+                {% if links %}
+                    {% for link in links %}
+                        <li class="list-group-item">
+                            <a href="{{ link.link }}" target="_blank">{{ link.nome }}</a>
+                        </li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Sem links</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+    <div class="index-views">
+        <div class="index-listing" id="index-projects-views">
+            <h4>Projetos:</h4>
+            <br>
+            <ul class="list-group">
+                {% if projetos %}
+                    {% for projeto in projetos %}
+                        <li class="list-group-item"><a href="{% url 'display' id=projeto.id type_info='project' %}">{{ projeto }}<a></li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Sem projetos</li>
+                {% endif %}
+            </ul>
+        </div>
+        <div class="index-listing" id="index-events-views">
+            <h4>Eventos:</h4>
+            <br>
+            <ul class="list-group">
+                {% if eventos %}
+                    {% for evento in eventos %}
+                        <li class="list-group-item"><a href="{% url 'display' id=evento.id type_info='event' %}">{{ evento }}<a></li>
+                    {% endfor %}
+                {% else %}
+                    <li class="list-group-item">Sem eventos</li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+
+{% endblock body %}

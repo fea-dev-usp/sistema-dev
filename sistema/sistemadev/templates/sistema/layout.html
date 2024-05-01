@@ -1,0 +1,236 @@
+{% load static %}
+{% load custom_tags %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Sistema: FEA.dev</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <link rel="icon" href="{% static 'sistema/images/favicon_system.jpg' %}">
+    <link href="{% static 'sistema/styles.css' %}" rel="stylesheet">
+    <script src="{% static 'sistema/main.js' %}"></script>
+    {% block script %}{% endblock script %}
+    {% block style %}
+    {% endblock style %}
+    <style>
+        @media screen and (max-width: 768px) {
+            .menu-collapse {
+                display: block;
+            }
+            .main-container {
+                display: block;
+            }
+            .sidebar {
+                display: none;
+            }
+            .main {
+                margin-left: 0;
+                width: 100%;
+            }
+        }
+
+        @media screen and (max-width: 474.5px) {
+            .search-bar {
+                width: 40%;
+            }
+        }
+        @media screen and (max-width: 399.5px) {
+            .search-bar {
+                display: none;
+            }
+        }
+    </style>
+  </head>
+  <body>
+    <div class="main-container">
+        <div class="menu-collapse">
+            <nav class="navbar navbar-light" id="navbar-collapsed">
+                <div class="dropdown">
+                    <button id="openNav-button" class="navbar-brand" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        <svg class="close-bar" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5"/>
+                        </svg>
+                        <svg class="open-bar" xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-list-nested" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M4.5 11.5A.5.5 0 0 1 5 11h10a.5.5 0 0 1 0 1H5a.5.5 0 0 1-.5-.5m-2-4A.5.5 0 0 1 3 7h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m-2-4A.5.5 0 0 1 1 3h10a.5.5 0 0 1 0 1H1a.5.5 0 0 1-.5-.5"/>
+                        </svg>
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        {% if user.is_authenticated %}
+                            <li><a class="dropdown-item" href="{% url 'index' %}">Home</a></li>
+                            <li><a class="dropdown-item" href="{% url 'calendar' %}">Calendário</a></li>
+                            <li><a class="dropdown-item" href="{% url 'ranking' %}">Ranking</a></li>
+                            {% with position_bool=user.position|get_list %}
+                                {% if position_bool  %}
+                                    <li><a class="dropdown-item" href="{% url 'meeting' %}">Reunião</a></li>
+                                {% endif %}
+                            {% endwith %}
+                            {% if user.is_staff and user.posicao|get_list %}
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item" href="{% url 'create' 'user' %}">Criar Usuário</a></li>
+                                <li><a class="dropdown-item" href="{% url 'create' 'project' %}">Criar Projeto</a></li>
+                                <li><a class="dropdown-item" href="{% url 'create' 'event' %}">Criar Evento</a></li>
+                            {% endif %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'profile' %}">{{ user.username }}</a></li>
+                            <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
+                        {% else %}
+                            <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+                <span class="search-bar navbar-text">
+                    <form action="{% url 'search' %}" method="get">
+                        {% csrf_token %}
+                        <input class="form-control" type="text" name="q" placeholder="Search">
+                        <input type="submit" style="visibility: hidden;">
+                    </form>
+                </span>
+                <a href="{% url 'index' %}">
+                    <span class="navbar-text d-flex" style="color: #eee;">
+                        <div><img src="{% static 'sistema/images/favicon_system.jpg' %}" alt="Logo"></div>
+                        <div class="name-navbar-collapsed">FEA.dev</div>
+                    </span>
+                </a>
+            </nav>
+        </div>
+        <nav class="sidebar">
+            <header>
+                <a href="{% url 'index' %}">
+                    <div class="image-text">
+                        <span class="image">
+                            <img src="{% static 'sistema/images/favicon_system.jpg' %}" alt="Logo">
+                        </span>
+                    </div>
+                    <div class="text header-text">
+                        <span class="name">FEA.dev</span>
+                    </div>
+                </a>
+            </header>
+            <hr>
+            <div class="menu-bar">
+                <div class="menu">
+                    {% if user.is_authenticated %}
+                        <ul class="menu-links">
+                            <li>
+                                <span class="text nav-text">
+                                    <form action="{% url 'search' %}" method="get">
+                                        {% csrf_token %}
+                                        <input class="form-control" type="text" name="q" placeholder="Search">
+                                        <input type="submit" style="visibility: hidden;">
+                                    </form>
+                                </span>
+                            </li>
+                            <li>
+                                <a href="{% url 'index' %}">
+                                    <i class="bi bi-house-door"></i>
+                                    <span class="text nav-text">Home</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'calendar' %}">
+                                    <i class="bi bi-calendar"></i>
+                                    <span class="text nav-text">Calendário</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{% url 'ranking' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="23px" height="23px" viewBox="0 0 24 24"><path fill="currentColor" d="m12 7.09l2.45 1.49l-.65-2.81L16 3.89l-2.89-.25L12 1l-1.13 2.64L8 3.89l2.18 1.88l-.68 2.81zm-8 6l2.45 1.49l-.65-2.81L8 9.89l-2.89-.25L4 7L2.87 9.64L0 9.89l2.18 1.88l-.68 2.81zm16-3l2.45 1.49l-.65-2.81L24 6.89l-2.89-.25L20 4l-1.13 2.64l-2.87.25l2.18 1.88l-.68 2.81zM15 23H9V10h6zm-8 0H1v-6h6zm16 0h-6V13h6z"/></svg>
+                                    <span class="text nav-text">Ranking</span>
+                                </a>
+                            </li>
+                            {% if user.posicao|get_list %}
+                                <li>
+                                    <a href="{% url 'meeting' %}">
+                                        <i class="bi bi-alarm"></i>
+                                        <span class="text nav-text">Reunião</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                            {% if user.is_staff and user.posicao|get_list %}
+                                <li>
+                                    <a href="{% url 'create' 'user' %}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-person-fill-add" viewBox="0 0 16 16">
+                                            <path d="M12.5 16a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7m.5-5v1h1a.5.5 0 0 1 0 1h-1v1a.5.5 0 0 1-1 0v-1h-1a.5.5 0 0 1 0-1h1v-1a.5.5 0 0 1 1 0m-2-6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                                            <path d="M2 13c0 1 1 1 1 1h5.256A4.493 4.493 0 0 1 8 12.5a4.49 4.49 0 0 1 1.544-3.393C9.077 9.038 8.564 9 8 9c-5 0-6 3-6 4"/>
+                                          </svg>
+                                        <span class="text nav-text">Criar Usuário</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'create' 'project' %}">
+                                        <i class="bi bi-file-plus-fill"></i>
+                                        <span class="text nav-text">Criar Projeto</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'create' 'event' %}">
+                                        <i class="bi bi-file-plus-fill"></i>
+                                        <span class="text nav-text">Criar Evento</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'admin:index' %}">
+                                        <i class="bi bi-gear"></i>
+                                        <span class="text nav-text">Gerenciar</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                        <div class="bottom-content">
+                            <hr>
+                            <ul class="menu-bottom-links">
+                                <li>
+                                    <a href="{% url 'profile' %}">
+                                        <i class="bi bi-person-circle"></i>
+                                        <span class="text nav-text">{{ user.username }}</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{% url 'logout' %}">
+                                        <i class="bi bi-box-arrow-left"></i>
+                                        <span class="text nav-text">Logout</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% else %}
+                        <div class="bottom-content">
+                            <hr style="margin-top: 15px;">
+                            <ul class="menu-links">
+                                <li>
+                                    <a href="{% url 'login' %}">
+                                        <i class="bi bi-box-arrow-in-right"></i>
+                                        <span class="text nav-text">Login</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </nav>
+        <div class="main">
+            {% block body %}
+            {% endblock body %}
+        </div>
+    </div>
+
+    <script>
+        document.querySelector('#openNav-button').addEventListener('shown.bs.dropdown', function (event) {
+            event.preventDefault();
+            document.querySelector('.close-bar').style.display = 'none';
+            document.querySelector('.open-bar').style.display = 'block';
+        });
+        document.querySelector('#openNav-button').addEventListener('hidden.bs.dropdown', function (event) {
+            event.preventDefault();
+            document.querySelector('.open-bar').style.display = 'none';
+            document.querySelector('.close-bar').style.display = 'block';
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+
+  </body>
+</html>
